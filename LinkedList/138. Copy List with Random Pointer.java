@@ -40,7 +40,7 @@ public class Solution {
         }
     }
 
-    // use map
+    // Solution1: use map
     public static RandomListNode copyRandomList(RandomListNode head) {
         if (head == null) {
         	return null;
@@ -61,5 +61,42 @@ public class Solution {
         }
 
         return map.get(head);
+    }
+
+    // Solution2: no extra space
+    public static RandomListNode copyRandomList(RandomListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        // copy node
+        RandomListNode curt = head;
+        while (curt != null) {
+            RandomListNode copy = new RandomListNode(curt.label);
+            copy.next = curt.next;
+            curt.next = copy;
+            curt = curt.next.next;
+        }
+        // copy random node
+        curt = head;
+        while (curt != null) {
+            if (curt.random != null) {
+                curt.next.random = curt.random.next;
+            }
+            curt = curt.next.next;
+        }
+
+        // restore list
+        curt = head;
+        RandomListNode dummy = new RandomListNode(0);
+        RandomListNode newHead = dummy;
+        while (curt != null) {
+            newHead.next = curt.next;
+            curt.next = curt.next.next;
+            curt = curt.next;
+            newHead = newHead.next;
+        }
+
+        return dummy.next;
     }
 }
