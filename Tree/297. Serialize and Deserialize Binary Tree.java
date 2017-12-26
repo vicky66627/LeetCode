@@ -34,7 +34,7 @@ public class Solution {
         // output: 1,2,3,4,5,6,7,8,null,null,null...
 	}
 
-	private static String traverseTree(TreeNode root) {
+	private String traverseTree(TreeNode root) {
         if (root == null) {
             return "null";
         }
@@ -59,7 +59,7 @@ public class Solution {
 // Solution1: DFS
 class Codec {
     // Encodes a tree to a single string.
-    public static String serialize(TreeNode root) {
+    public String serialize(TreeNode root) {
         if (root == null) {
         	return "#";
         }
@@ -68,7 +68,7 @@ class Codec {
         return res.substring(0, res.length() - 1);
     }
 
-    private static void dfsSerialize(TreeNode root, StringBuilder res) {
+    private void dfsSerialize(TreeNode root, StringBuilder res) {
     	if (root == null) {
     		res.append("#,");
     		return;
@@ -80,7 +80,7 @@ class Codec {
     }
 
     // Decodes your encoded data to tree.
-    public static TreeNode deserialize(String data) {
+    public TreeNode deserialize(String data) {
         if (data == null || data.length() == 0) {
         	return null;
         }
@@ -90,7 +90,7 @@ class Codec {
         return dfsDeserialize(dataArr, idx);
     }
 
-    private static TreeNode dfsDeserialize(String[] dataArr, int[] idx) {
+    private TreeNode dfsDeserialize(String[] dataArr, int[] idx) {
     	if (dataArr[idx[0]].equals("#")) {
     		idx[0]++;
     		return null;
@@ -107,7 +107,7 @@ class Codec {
 // Solution2: BFS
 class Codec {
     // Encodes a tree to a single string.
-    public static String serialize(TreeNode root) {
+    public String serialize(TreeNode root) {
         if (root == null) {
         	return "";
         }
@@ -131,7 +131,7 @@ class Codec {
     }
 
     // Decodes your encoded data to tree.
-    public static TreeNode deserialize(String data) {
+    public TreeNode deserialize(String data) {
     	// System.out.println(data);
         if (data == null || data.length() == 0) {
         	return null;
