@@ -46,14 +46,73 @@ public class Solution {
         // output: [4,5,6,7]
     }
 
-    // O(n + k) time, O(n) space
+    // Solution1: O(klogn) time, O(klogn) space
     public static List<Integer> closestKValues(TreeNode root, double target, int k) {
         List<Integer> res = new ArrayList<>();
         if (root == null) {
             return res;
         }
 
-        Stack<Integer> pred = new Stack<>();  // stores values less than target
+        Stack<TreeNode> pred = new Stack<>();  // stores nodes whose value less than or equal to target
+        Stack<TreeNode> succ = new Stack<>();  // stores nodes whose value greater than target
+
+        while (root != null) {
+            if (target < root.val) {
+                succ.push(root);
+                root = root.left;
+            } else {
+                pred.push(root);
+                root = root.right;
+            }
+        }
+
+        while (k-- > 0) {
+            if (pred.empty() && succ.empty()) {
+                break;
+            } else if (pred.empty()) {
+                res.add(getSucc(succ));
+            } else if (succ.empty()) {
+                res.add(getPred(pred));
+            } else {
+                if (Math.abs(pred.peek().val - target) < Math.abs(succ.peek().val - target)) {
+                    res.add(getPred(pred));
+                } else {
+                    res.add(getSucc(succ));
+                }
+            }
+        }
+
+        return res;
+    }
+
+    private static int getPred(Stack<TreeNode> stack) {
+        TreeNode pop = stack.pop();
+        TreeNode node = pop.left;
+        while (node != null) {
+            stack.push(node);
+            node = node.right;
+        }
+        return pop.val;
+    }
+
+    private static int getSucc(Stack<TreeNode> stack) {
+        TreeNode pop = stack.pop();
+        TreeNode node = pop.right;
+        while (node != null) {
+            stack.push(node);
+            node = node.left;
+        }
+        return pop.val;
+    }
+
+    // Solution2: O(n + k) time, O(n) space
+    public static List<Integer> closestKValues(TreeNode root, double target, int k) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+
+        Stack<Integer> pred = new Stack<>();  // stores values less than or equal to target
         Stack<Integer> succ = new Stack<>();  // stores values greater than target
 
         inorder(root, false, pred, target);

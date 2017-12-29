@@ -91,7 +91,7 @@ public class Solution {
 
         Map<TreeNode, TreeNode> map = new HashMap<>();  // stores all edges that trace node back to its parent
         // search for node whose value equals k
-        TreeNode node = dfs(root, k, map);
+        TreeNode node = findNode(root, k, map);
         if (node == null) {
             return -1;
         }
@@ -118,7 +118,7 @@ public class Solution {
         return -1;
     }
 
-    private static TreeNode dfs(TreeNode root, int target, Map<TreeNode, TreeNode> map) {
+    private static TreeNode findNode(TreeNode root, int target, Map<TreeNode, TreeNode> map) {
         if (root == null) {
             return null;
         }
@@ -129,14 +129,14 @@ public class Solution {
 
         if (root.left != null) {
             map.put(root.left, root);
-            TreeNode left = dfs(root.left, target, map);
+            TreeNode left = findNode(root.left, target, map);
             if (left != null) {
                 return left;
             }
         }
         if (root.right != null) {
             map.put(root.right, root);
-            TreeNode right = dfs(root.right, target, map);
+            TreeNode right = findNode(root.right, target, map);
             if (right != null) {
                 return right;
             }

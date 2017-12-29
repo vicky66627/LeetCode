@@ -91,7 +91,7 @@ class Codec {
     }
 
     private TreeNode buildTree(String[] dataArr, long lower, long upper, int[] idx) {
-        if (idx[0] >= dataArr.length || Integer.parseInt(dataArr[idx[0]]) < lower || Integer.parseInt(dataArr[idx[0]]) > upper) {
+        if (idx[0] >= dataArr.length || Integer.parseInt(dataArr[idx[0]]) <= lower || Integer.parseInt(dataArr[idx[0]]) >= upper) {
             return null;
         }
 

@@ -32,6 +32,7 @@ public class Solution {
         // output: 1,null,2,null,4,null,8,null,5,null,3,null,6,null,7,null,...
     }
 
+    // recursive
     public static void flatten(TreeNode root) {
         if (root == null) {
             return;
@@ -51,6 +52,26 @@ public class Solution {
         }
 
         root.right = right;
+    }
+
+    // iterative
+    public static void flatten(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        while (root != null) {
+            if (root.left != null) {
+                TreeNode last = root.left;
+                while (last.right != null) {
+                    last = last.right;
+                }
+                last.right = root.right;
+                root.right = root.left;
+                root.left = null;
+            }
+            root = root.right;
+        }
     }
 
     private static String traverseTree(TreeNode root) {

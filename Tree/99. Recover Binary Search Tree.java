@@ -67,7 +67,7 @@ public class Solution {
 
         findNodes(root.left);
 
-        if (prev != null && root.val <= prev.val) {
+        if (prev != null && root.val < prev.val) {
             if (first == null) {
                 first = prev;
             }
