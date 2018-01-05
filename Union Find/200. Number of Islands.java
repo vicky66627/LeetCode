@@ -103,6 +103,47 @@ public class Solution {
         }
         return uf.count;
     }
+
+    // Solution3: BFS
+    public static int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0] == null || grid[0].length == 0) {
+            return 0;
+        }
+
+        int cnt = 0;
+        Queue<int[]> queue = new LinkedList<>();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == '1') {
+                    cnt++;
+                    grid[i][j] = '0';
+                    queue.offer(new int[]{i, j});
+                    while (!queue.isEmpty()) {
+                        int[] curt = queue.poll();
+                        int r = curt[0];
+                        int c = curt[1];
+                        if (r - 1 >= 0 && grid[r - 1][c] == '1') {
+                            grid[r - 1][c] = '0';
+                            queue.offer(new int[]{r - 1, c});
+                        }
+                        if (r + 1 < grid.length && grid[r + 1][c] == '1') {
+                            grid[r + 1][c] = '0';
+                            queue.offer(new int[]{r + 1, c});
+                        }
+                        if (c - 1 >= 0 && grid[r][c - 1] == '1') {
+                            grid[r][c - 1] = '0';
+                            queue.offer(new int[]{r, c - 1});
+                        }
+                        if (c + 1 < grid[0].length && grid[r][c + 1] == '1') {
+                            grid[r][c + 1] = '0';
+                            queue.offer(new int[]{r, c + 1});
+                        }
+                    }
+                }
+            }
+        }
+        return cnt;
+    }
 }
 
 class UnionFind {

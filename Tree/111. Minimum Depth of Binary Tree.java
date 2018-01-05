@@ -24,6 +24,7 @@ public class Solution {
 		// output: 2
 	}
 
+	// DFS
 	public static int minDepth(TreeNode root) {
 		if (root == null) {
 			return 0;
@@ -34,4 +35,33 @@ public class Solution {
 
 		return (left == 0 || right == 0) ? (left + right + 1) : (Math.min(left, right) + 1);
 	}
+
+	// BFS - level order
+    public static int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        
+        int depth = 1;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode curt = queue.poll();
+                if (curt.left == null && curt.right == null) {
+                    return depth;
+                }
+                if (curt.left != null) {
+                    queue.offer(curt.left);
+                }
+                if (curt.right != null) {
+                    queue.offer(curt.right);
+                }
+            }
+            depth++;
+        }
+        
+        return depth;
+    }
 }

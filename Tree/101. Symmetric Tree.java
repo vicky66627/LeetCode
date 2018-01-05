@@ -26,6 +26,7 @@ public class Solution {
 		// output: true
 	}
 
+	// Solution1: recusive
 	public static boolean isSymmetric(TreeNode root) {
 		if (root == null) {
 			return true;
@@ -43,6 +44,52 @@ public class Solution {
 		}
 
 		return left.val == right.val && helper(left.left, right.right) && helper(left.right, right.left);
+	}
+
+	// Solution2: iterative with queue
+    public static boolean isSymmetric(TreeNode root) {
+		if (root == null || (root.left == null && root.right == null)) {
+			return true;
+		}
+		
+        if (root.left == null || root.right == null) {
+            return false;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root.left);
+        queue.offer(root.right);
+        
+        while(!queue.isEmpty()) {
+            if (queue.size() % 2 == 1) {
+                return false;
+            }
+            TreeNode left = queue.poll();
+            TreeNode right = queue.poll();
+            if (left.val != right.val) {
+                return false;
+            }
+            if (left.left != null) {
+                if (right.right == null) {
+                    return false;
+                }
+                queue.offer(left.left);
+                queue.offer(right.right);
+            } else if (right.right != null) {
+                return false;
+            }
+            
+            if (left.right != null) {
+                if (right.left == null) {
+                    return false;
+                }
+                queue.offer(left.right);
+                queue.offer(right.left);
+            } else if (right.left != null) {
+                return false;
+            }
+        }
+		return true;
 	}
 }
 
