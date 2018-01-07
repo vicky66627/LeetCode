@@ -32,6 +32,7 @@ public class Solution {
         // [["cat","fat","fit","fin"],["cat","fat","fan","fin"],["cat","can","fan","fin"]]
 	}
 
+    // Two-end BFS + DFS: fast
     public static List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
         List<List<String>> res = new ArrayList<>();
     	if (beginWord.length() != endWord.length()) {
@@ -126,5 +127,112 @@ public class Solution {
             generateList(word, endWord, map, inner, res);
             inner.remove(inner.size() - 1);
         }
+    }
+
+    // another solution: BFS + DFS
+    public static List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        List<List<String>> res = new ArrayList<>();
+        if (beginWord.length() != endWord.length()) {
+            return res;
+        }
+        if (beginWord.equals(endWord)) {
+            res.add(new ArrayList<String>(Arrays.asList(beginWord)));
+            return res;
+        }
+
+        Set<String> dict = new HashSet<>(wordList);
+
+        if (dict.contains(beginWord)) {
+            dict.remove(beginWord);
+        }
+        if (!dict.contains(endWord)) {
+            return res;
+        }
+
+        Map<String, List<String>> map = new HashMap<>();
+        Map<String, Integer> dist = new HashMap<>();
+
+        processMap(dict, beginWord, endWord, map, dist);
+//        System.out.println(map + " " + dist);
+        generateList(beginWord, endWord, map, dist, new ArrayList<>(), res);
+
+        return res;
+    }
+
+    // BFS
+    private static void processMap(Set<String> dict, String beginWord, String endWord, Map<String, List<String>> map, Map<String, Integer> dist) {
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        dist.put(beginWord, 0);
+
+        boolean found = false;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String curt = queue.poll();
+                int curtDist = dist.get(curt);
+                List<String> neighbors = getNeighbors(curt, dict);
+                for (String neighbor : neighbors) {
+                    map.putIfAbsent(curt, new ArrayList<>());
+                    map.get(curt).add(neighbor);
+
+                    if (!dist.containsKey(neighbor)) {  // check if visited
+                        dist.put(neighbor, curtDist + 1);
+                        if (endWord.equals(neighbor)) {
+                            found = true;
+                        } else {
+                            queue.offer(neighbor);
+                        }
+                    }
+                }
+                if (found) {
+                    break;
+                }
+            }
+         }
+    }
+
+    private static List<String> getNeighbors(String node, Set<String> dict) {
+        List<String> res = new ArrayList<>();
+        char[] chs = node.toCharArray();
+
+        for (int i = 0; i < chs.length; i++) {
+            char old = chs[i];
+            for (char c = 'a'; c <= 'z'; c++) {
+                if (c == old) {
+                    continue;
+                }
+                chs[i] = c;
+                String target = new String(chs);
+
+                if (dict.contains(target)) {
+                    res.add(target);
+                }
+            }
+            chs[i] = old;
+        }
+        return res;
+    }
+
+    // DFS
+    private static void generateList(String curt, String endWord, Map<String, List<String>> map, Map<String, Integer> dist, List<String> inner, List<List<String>> res) {
+        inner.add(curt);
+        if (curt.equals(endWord)) {
+            res.add(new ArrayList<>(inner));
+            inner.remove(inner.size() - 1);
+            return;
+        }
+
+        if (!map.containsKey(curt)) {
+            return;
+        }
+
+        for (String next : map.get(curt)) {
+            if (dist.get(next) == dist.get(curt) + 1) {
+                generateList(next, endWord, map, dist, inner, res);
+            }
+
+        }
+        inner.remove(inner.size() - 1);
     }
 }
