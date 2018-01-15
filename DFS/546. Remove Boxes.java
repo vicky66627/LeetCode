@@ -23,7 +23,7 @@ public class Solution {
 
         int n = boxes.length;
         int[][][] dp = new int[n][n][n];
-        return remove(boxes, 0, boxes.length - 1, 0, dp);
+        return remove(boxes, 0, n - 1, 0, dp);
     }
 
     private static int remove(int[] boxes, int l, int r, int k, int[][][]dp) {
